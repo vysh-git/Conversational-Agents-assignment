@@ -109,6 +109,26 @@ Do NOT invent state.
 Always rely on tool outputs.
 """
 
+def generate_narration(round_no, user_move, bot_move, result):
+    prompt = f"""
+Round {round_no} just ended.
+
+User move: {user_move}
+Bot move: {bot_move}
+Result: {result['winner']}
+Reason: {result['reason']}
+
+Explain this round briefly in simple, friendly language.
+"""
+
+    response = client.models.generate_content(
+        model="models/gemini-2.5-flash",
+        contents=prompt
+    )
+
+    return response.text.strip()
+
+
 # Game Loop 
 def play_game():
     print("Rock–Paper–Scissors")
@@ -119,6 +139,7 @@ def play_game():
     while not game_state["game_over"]:
         user_input = input(f"Round {game_state['round'] + 1} — Your move: ")
         user_validation = validate_move(user_input, "user")
+
         bot_move = random.choice(["rock", "paper", "scissors", "bomb"])
         bot_validation = validate_move(bot_move, "bot")
         if not bot_validation["valid"]:
@@ -132,10 +153,17 @@ def play_game():
         result = resolve_round(user_validation["move"], bot_move)
         update_game_state(result, user_validation["move"], bot_move)
 
-        print(f"You played: {user_validation['move']}")
-        print(f"Bot played: {bot_move}")
-        print(f"Round result: {result['winner']} ({result['reason']})")
+        narration = generate_narration(
+            game_state["round"],
+            user_validation["move"],
+            bot_move,
+            result
+        )
+
+        print(narration)
         print(f"Score → You {game_state['user_score']} : Bot {game_state['bot_score']}\n")
+
+
 
     print("GAME OVER ")
     if game_state["user_score"] > game_state["bot_score"]:
