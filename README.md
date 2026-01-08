@@ -1,56 +1,47 @@
 # Rock–Paper–Scissors – AI Game Referee
 
 ## Overview
-This project is a simple AI referee for the Rock–Paper–Scissors game. The system explains the rules, takes user input, checks if moves are valid, keeps track of scores and rounds, and ends the game automatically after three rounds.
+This project is a simple AI referee for the Rock–Paper–Scissors-Bomb game. It explains the rules, takes user input, checks if moves are valid, tracks scores and rounds, and automatically ends the game after three rounds.
 
 ## State Model
-The game state is stored in a single dictionary that keeps track of the current round, user and bot scores, bomb usage, and whether the game is over. The state is updated only through functions, not through prompts, so the game behaves consistently across turns.
+The game state is stored in a single dictionary that tracks the current round, user and bot scores, bomb usage, and whether the game is over. The state is updated only through functions, which keeps the game behavior consistent.
 
 ## Agent and Tool Design
-The agent acts as a referee that interacts with the user and explains what happens in each round. The actual game logic is handled using tools such as move validation, round resolution, and state updates. This keeps the logic separate from the conversation.
+The agent acts as a referee that talks to the user and explains each round. Google ADK is used with the **Gemini 2.5 Flash** model to generate round explanations. All game logic such as move validation, winner decision, and state updates is handled using separate functions, keeping logic and conversation separate.
 
 ## Output
 
-### Round 1 — Your move: rock
+### Rock–Paper–Scissors
+• Game is best of 3 rounds
 
-You played: rock
+• Moves: rock, paper, scissors, bomb: once per game
 
-Bot played: rock
+• Bomb beats all; bomb vs bomb is a draw
 
-Round result: draw (Same move)
+### Round 1 — Your move: bomb
+You played **bomb**, and the bot played **paper**. 
 
-Score → You 0 : Bot 0
-
-### Round 2 — Your move: papwe
-
-Invalid move. Round wasted.
-
-### Round 3 — Your move: bomb
-
-You played: bomb
-
-Bot played: rock
-
-Round result: user (Bomb beats everything)
+Since bomb beats everything, you won the round.  
 
 Score → You 1 : Bot 0
 
+### Round 2 — Your move: paper
+You played **paper**, but the bot played **bomb**, so the bot won this round.  
+
+Score → You 1 : Bot 1
+
+### Round 3 — Your move: rock
+You played **rock** and the bot played **paper**. 
+
+Paper beats rock, so the bot won the round. 
+
+Score → You 1 : Bot 2
+
 ### GAME OVER
-
-Final Result: You win
-
+Final Result: **Bot wins**
 
 ## Tradeoffs
-To keep the project simple and focused, a few design tradeoffs were made.  
-The game runs in a command-line interface instead of a graphical UI, so the focus stays on game logic and agent behavior. 
-The game state is stored in memory and resets when the program restarts, which avoids the need for databases or external storage.
-
+The game uses a command-line interface instead of a UI to keep things simple. The bot uses random moves instead of a smart strategy, and the game state is stored only in memory, so it resets when the program restarts. Google ADK is used only to generate natural language explanations for each round,
 
 ## Future Improvements
-With more time, the following improvements i  could add like 
-* Support for natural language inputs like “I choose a bomb”
-* A smarter bot strategy using the LLM instead of random moves
-* Option to play multiple games in one session
-* Better conversational responses
-
-
+With more time, the game could support natural language inputs, use the LLM for smarter bot decisions, allow multiple games in one session, and provide more consistent conversational responses.
