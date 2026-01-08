@@ -41,12 +41,16 @@ Final Result: You win
 
 
 ## Tradeoffs
-The game runs in a command-line interface instead of a UI to keep the implementation simple. The bot uses random moves instead of an intelligent strategy to avoid unnecessary complexity.
+To keep the project simple and focused, a few design tradeoffs were made.  
+The game runs in a command-line interface instead of a graphical UI, so the focus stays on game logic and agent behavior. 
+The game state is stored in memory and resets when the program restarts, which avoids the need for databases or external storage.
+
 
 ## Future Improvements
 With more time, the following improvements i  could add like 
-* Support for natural language inputs like “I choose rock”
+* Support for natural language inputs like “I choose a bomb”
 * A smarter bot strategy using the LLM instead of random moves
 * Option to play multiple games in one session
 * Better conversational responses
+
 
